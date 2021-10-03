@@ -56,6 +56,53 @@ namespace ParcelMe.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public IActionResult Login(LoginModel login)
+        {
+            var data = repo.Login(login.Username,login.Password);
+            if (ModelState.IsValid)
+            {
+                if (data != null)
+                {
+                    HttpContext.Session.SetString("SessionId", data.Id.ToString());
+                    //Session["id"] = data.Id;
+                    HttpContext.Session.SetString("SessionUsername", login.Username.ToString());
+                    //Session["Username"] = login.Username;
+                    return RedirectToAction("Profile","Customer");
+                }
+                else
+                {
+                    ViewBag.Message = "Credentials are Incorrect";
+                }
+            }
+            return View();
+        }
+
+        public IActionResult Profile()
+        {
+            var uname = HttpContext.Session.GetString("SessionUsername");
+            if ( uname != null)
+            {
+                return View(Mapper.Map(repo.Profile(uname)));
+            }
+            else
+            {
+                return View();
+            }
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
         // GET: CustomerController/Edit/5
         public ActionResult Edit(int id)
         {

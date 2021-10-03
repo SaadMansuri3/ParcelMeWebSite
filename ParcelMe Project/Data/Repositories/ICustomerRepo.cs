@@ -10,6 +10,10 @@ namespace Data.Repositories
     {
         IEnumerable<Customer> DisplayAll();
         void Register(Customer cust);
+        Customer GetCustomerById(int id);
+        Customer Edit(int id);
+        Customer Login(string Username, string Password);
+        Customer Profile(string uname);
         void Save();
     }
 }

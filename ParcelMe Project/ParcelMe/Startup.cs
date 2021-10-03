@@ -28,6 +28,8 @@ namespace ParcelMe
             services.AddControllersWithViews();
             services.AddDbContext<Data.ParcelMeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ParcelMe")));
             services.AddScoped<ICustomerRepo, CustomerRepo>();
+            services.AddSession();
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +51,7 @@ namespace ParcelMe
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
